@@ -1,0 +1,2 @@
+D:/Android/AndroidStudioProjects/roshetta/android/app/.cxx/Debug/1j2d1u2l/x86_64/CMakeFiles/edit_cache.dir
+D:/Android/AndroidStudioProjects/roshetta/android/app/.cxx/Debug/1j2d1u2l/x86_64/CMakeFiles/rebuild_cache.dir

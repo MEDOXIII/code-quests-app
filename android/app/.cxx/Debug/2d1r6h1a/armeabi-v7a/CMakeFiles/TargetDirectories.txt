@@ -1,0 +1,2 @@
+D:/Android/AndroidStudioProjects/roshetta/android/app/.cxx/Debug/2d1r6h1a/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/Android/AndroidStudioProjects/roshetta/android/app/.cxx/Debug/2d1r6h1a/armeabi-v7a/CMakeFiles/rebuild_cache.dir

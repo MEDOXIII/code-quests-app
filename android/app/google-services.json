@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "952033006305",
+    "project_id": "rosheta-e1fa9",
+    "storage_bucket": "rosheta-e1fa9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952033006305:android:c07b68756fd6fefb785da0",
+        "android_client_info": {
+          "package_name": "com.example.roshetta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJydpvMvJ5MwT6w9WOMHvm9ISuObI9B_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
