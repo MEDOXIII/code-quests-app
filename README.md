@@ -1,18 +1,18 @@
 # roshetta
 
-A new Flutter project.
+A Flutter project.
 
-## Getting Started
+## Business Understanding
+- Business Requirements Understanding:
+-  The business goal of the app is to help customers find Doctors and to book a session with them at an available time,
+   and it allow the customer to cancel appointment or reschedule it which allows the doctors to get more customers and 
+   helps the business to make a profit from providing the service for both the customer and the doctors
 
-This project is a starting point for a Flutter application.
+-User Experience Thought Process:
+- I suggest that to handle the payment through the app, which gives the business control over the money flow and to make great  
+  deals with the customer and the doctors, for examble give the customers a 10% discount on the price and at the same time  
+  Get 20% from the dictors 20% for all the customers that you bring in and all the marketing that you will be doing and the business 
+  can make 10% profit on every payment, and I add a teaser in the app for the payment option.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
 
 # code-quests-app
