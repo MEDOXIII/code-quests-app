@@ -6,29 +6,31 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:roshetta/core/helper/internet_connection_checker.dart';
 import 'package:roshetta/core/helper/show_snack_bar.dart';
-import 'package:roshetta/core/widgets/custom_button.dart';
+import 'package:roshetta/core/widgets/custom_card.dart';
 import 'package:roshetta/core/widgets/side_title.dart';
 import 'package:roshetta/features/appointment/view/pages/appointment_page.dart';
 
-class DetailsPage extends StatefulWidget {
+class ChangeAppointmentPage extends StatefulWidget {
   final String docId;
   final String photo;
   final String name;
   final String details;
-  final String workDays;
-  final String specialty;
-  const DetailsPage({
+  final String time;
+  final String date;
+  final String appointmentId;
+  const ChangeAppointmentPage({
     super.key,
     required this.docId,
     required this.photo,
     required this.name,
     required this.details,
-    required this.workDays,
-    required this.specialty,
+    required this.time,
+    required this.date,
+    required this.appointmentId,
   });
 
   @override
-  State<DetailsPage> createState() => _DetailsPageState();
+  State<ChangeAppointmentPage> createState() => _ChangeAppointmentPageState();
 }
 
 final EasyDatePickerController _controller = EasyDatePickerController();
@@ -45,171 +47,91 @@ String todayStr = '';
 String hourLabel = '';
 String selectedTime = '';
 
-class _DetailsPageState extends State<DetailsPage> {
-  Future getDays() async {
+Future getDays({required String doctorId}) async {
+  await FirebaseFirestore.instance
+      .collection("doctors")
+      .doc(doctorId)
+      .collection('availableDays')
+      .get()
+      .then((value) {
+    allData = value.docs
+        .map((doc) => {
+              'id': doc.id,
+              ...doc.data(),
+            })
+        .toList();
+  });
+}
+
+Future changeAppointment({
+  required String time,
+  required String doctorId,
+  required String oldTime,
+  required String date,
+  required String appointmentId,
+  required String oldDate,
+}) async {
+  try {
     await FirebaseFirestore.instance
-        .collection("doctors")
-        .doc(widget.docId)
-        .collection('availableDays')
-        .get()
-        .then((value) {
-      // debugPrint('----------------------------*${value.docs}');
-
-      allData = value.docs
-          .map((doc) => {
-                'id': doc.id,
-                ...doc.data(),
-              })
-          .toList();
+        .collection('appointments')
+        .doc(appointmentId)
+        .update({
+      'date': date,
+      'time': time,
     });
+    await FirebaseFirestore.instance
+        .collection('doctors')
+        .doc(doctorId)
+        .collection('availableDays')
+        .doc(date)
+        .update({
+      '$time': false,
+    });
+    await FirebaseFirestore.instance
+        .collection('doctors')
+        .doc(doctorId)
+        .collection('availableDays')
+        .doc(oldDate)
+        .update({
+      '$oldTime': true,
+    });
+  } catch (e) {
+    debugPrint('++++++++++++++++++++++++++++++++$e');
   }
+}
 
-  Future setAppointment({
-    required String userId,
-    required String doctorId,
-    required String photo,
-    required String name,
-    required String details,
-    required String time,
-    required String date,
-  }) async {
-    try {
-      await FirebaseFirestore.instance.collection('appointments').doc().set({
-        'userId': userId,
-        'doctorId': doctorId,
-        'photoUrl': photo,
-        'name': name,
-        'details': details,
-        'date': date,
-        'time': time,
-      });
-
-      await FirebaseFirestore.instance
-          .collection('doctors')
-          .doc(widget.docId)
-          .collection('availableDays')
-          .doc(date)
-          .update({
-        '$time': false,
-      });
-    } catch (e) {
-      debugPrint('++++++++++++++++++++++++++++++++$e');
-    }
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const AppointmentPage(),
-        ));
-  }
-
+class _ChangeAppointmentPageState extends State<ChangeAppointmentPage> {
   @override
   Widget build(BuildContext context) {
-    getDays();
+    getDays(doctorId: widget.docId);
     return InternetConnectionChecker(
       body: SafeArea(
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: const Text('أختيار الميعاد'),
+            title: const Text('تغيير الميعاد'),
           ),
           body: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
-                  height: 20.0.h,
-                ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Card(
-                    color: Colors.white,
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
+                  child: CustomCard(
+                    photo: widget.photo,
+                    details: widget.details,
+                    name: widget.name,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Column(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CircleAvatar(
-                                radius: 50,
-                                backgroundImage: NetworkImage(
-                                  widget.photo,
-                                ),
-                                backgroundColor: Colors.transparent,
-                              ),
-                              Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    widget.name,
-                                    style: TextStyle(
-                                      fontSize: 20.sp,
-                                      color: Colors.deepPurple,
-                                      fontWeight: FontWeight.bold,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  Text(
-                                    widget.details,
-                                    style: TextStyle(fontSize: 15.sp),
-                                  ),
-                                ],
-                              ),
-                            ],
+                          Text(
+                            widget.time,
+                            style: TextStyle(fontSize: 15.sp),
                           ),
-                          SizedBox(
-                            height: 10.0.h,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: widget.workDays,
-                                      ),
-                                      const WidgetSpan(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(left: 5),
-                                          child: Icon(
-                                            Icons.timer_outlined,
-                                            color: Colors.deepPurple,
-                                            size: 15,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: widget.specialty,
-                                      ),
-                                      WidgetSpan(
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8),
-                                          child: Image.asset(
-                                            'assets/icons/price-tag.png',
-                                            width: 10.w,
-                                            height: 10.h,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                          Text(
+                            widget.date,
+                            style: TextStyle(fontSize: 15.sp),
                           ),
                         ],
                       ),
@@ -220,7 +142,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   height: 20.0.h,
                 ),
                 const SideTitle(
-                  title: 'أختيار اليوم',
+                  title: 'تغيير اليوم',
                 ),
                 SizedBox(
                   height: 20.0.h,
@@ -266,7 +188,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   height: 30.0.h,
                 ),
                 const SideTitle(
-                  title: 'أختيار الوقت',
+                  title: 'تغيير الوقت',
                 ),
                 SizedBox(
                   height: 20.0.h,
@@ -369,24 +291,43 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                         ),
                       ),
-                CustomButton(
-                  lable: 'أختيار الموعد',
-                  onClick: isTimeSelected
+                ElevatedButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.deepPurpleAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  onPressed: isTimeSelected
                       ? () {
                           debugPrint('**************************$selectedTime');
-                          setAppointment(
-                            userId: user,
-                            doctorId: widget.docId,
-                            photo: widget.photo,
-                            name: widget.name,
-                            details: widget.details,
+                          changeAppointment(
                             time: selectedTime,
+                            doctorId: widget.docId,
+                            oldTime: widget.time,
                             date: todayStr,
+                            oldDate: widget.date,
+                            appointmentId: widget.appointmentId,
                           );
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AppointmentPage(),
+                              ));
                         }
                       : () {
                           showSnackBar(context, 'يرجى إختيار موعد ');
                         },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    child: Text(
+                        style: TextStyle(
+                          fontSize: 15.0.sp,
+                          color: Colors.white,
+                        ),
+                        'تغيير الموعد'),
+                  ),
                 ),
               ],
             ),

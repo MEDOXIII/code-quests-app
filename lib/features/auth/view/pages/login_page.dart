@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:roshetta/core/helper/internet_connection_checker.dart';
+import 'package:roshetta/core/widgets/custom_button.dart';
 import 'package:roshetta/features/auth/view/pages/register_page.dart';
 import 'package:roshetta/features/home/view/pages/home_page.dart';
 
@@ -92,8 +93,8 @@ class _LoginPageState extends State<LoginPage> {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             validator: (password) =>
-                                password != null && password.length < 5
-                                    ? 'Enter min of 5 characters'
+                                password != null && password.length < 7
+                                    ? 'Enter min of 7 characters'
                                     : null,
                             decoration: InputDecoration(
                               contentPadding: const EdgeInsets.symmetric(
@@ -114,25 +115,12 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        ElevatedButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.deepPurple,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                          onPressed: singIn,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
-                            child: Text(
-                              style: TextStyle(
-                                fontSize: 15.0.sp,
-                                color: Colors.white,
-                              ),
-                              'تسجيل الدخول',
-                            ),
-                          ),
+                        SizedBox(
+                          height: 10.0.h,
+                        ),
+                        CustomButton(
+                          lable: 'تسجيل الدخول',
+                          onClick: singIn,
                         ),
                         SizedBox(
                           height: 20.0.h,

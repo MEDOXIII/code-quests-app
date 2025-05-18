@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:roshetta/core/helper/secrets.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -43,8 +44,8 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyB9aBeg0U9bepf9xb9xH3ZUgfFK8kAnwy4',
+  static  FirebaseOptions web = FirebaseOptions(
+    apiKey:  '$webApiKey',
     appId: '1:952033006305:web:5560ff932b774d50785da0',
     messagingSenderId: '952033006305',
     projectId: 'rosheta-e1fa9',
@@ -52,16 +53,16 @@ class DefaultFirebaseOptions {
     storageBucket: 'rosheta-e1fa9.firebasestorage.app',
   );
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDJydpvMvJ5MwT6w9WOMHvm9ISuObI9B_Q',
+  static  FirebaseOptions android = FirebaseOptions(
+    apiKey:  '$androidApiKey',
     appId: '1:952033006305:android:c07b68756fd6fefb785da0',
     messagingSenderId: '952033006305',
     projectId: 'rosheta-e1fa9',
     storageBucket: 'rosheta-e1fa9.firebasestorage.app',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBes9hlFmhV3DN4wW7rtGknjRYnPP2F120',
+  static  FirebaseOptions ios = FirebaseOptions(
+    apiKey: '$iosApiKey',
     appId: '1:952033006305:ios:415de6fcadd22f49785da0',
     messagingSenderId: '952033006305',
     projectId: 'rosheta-e1fa9',
